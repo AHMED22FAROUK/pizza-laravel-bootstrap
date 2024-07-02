@@ -25,9 +25,9 @@ class StorePizzaRequest extends FormRequest
             'name' => 'required|string|min:3|max:40',
             'category' => 'required|string|min:3',
             'description' => 'required|min:3|max:500',
-            'small_pizza_price' => 'required|number',
-            'medium_pizza_price' => 'required|number',
-            'large_pizza_price' => 'required|number',
+            'small_pizza_price' => 'required|numeric',
+            'medium_pizza_price' => 'required|numeric',
+            'large_pizza_price' => 'required|numeric',
             'image' => 'required|mimes:png,jpg,jpeg',
         ];
     }
