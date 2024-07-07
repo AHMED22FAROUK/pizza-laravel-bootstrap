@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePizzaRequest;
+use App\Http\Requests\UpdatePizzaRequest;
 use App\Models\Pizza;
 class PizzaController extends Controller
 {
@@ -13,7 +14,7 @@ class PizzaController extends Controller
     public function index()
     {
         //
-        $allPizza = Pizza::get();
+        $allPizza = Pizza::Paginate(6);
         return view('pizza.index', compact('allPizza'));
     }
 
@@ -60,21 +61,43 @@ class PizzaController extends Controller
     public function edit(string $id)
     {
         //
+        // dd($id);
+        $pizza = Pizza::find($id);
+        return view('pizza.edit', compact('pizza'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePizzaRequest $request, $id)
     {
         //
+        $pizza = Pizza::find($id);
+        $pizza = new Pizza;
+
+        $pizza->name = $request->name;
+        $pizza->description = $request->description;
+        $pizza->category = $request->category;
+        $pizza->small_pizza_price = $request->small_pizza_price;
+        $pizza->medium_pizza_price = $request->medium_pizza_price;
+        $pizza->large_pizza_price = $request->large_pizza_price;
+        if ($request->has('image')) {
+            $path = $request->image->store('public/pizza');
+        }else{
+            $path = $request->image;
+        }
+        $pizza->image = $path;
+        $pizza->save();
+        return redirect()->route('pizza.index')->with('message', 'Pizza Updated Successfuly');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         //
+        Pizza::find($id)->delete();
+        return redirect()->route('pizza.index')->with('message', 'Pizza Deleted Successfuly');
     }
 }

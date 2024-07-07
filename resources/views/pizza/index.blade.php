@@ -15,6 +15,7 @@
                     </ul>
 
                 </div>
+                {{-- delete this part --}}
                 @if (count($errors) > 0)
                 <div class="alert alert-danger">
                     @foreach ( $errors->all() as $error )
@@ -29,7 +30,12 @@
         {{-- right --}}
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    All Pizza
+                    <a href="{{ route('pizza.create') }}">
+                        <button class="btn btn-success">Add Pizza</button>
+                    </a>
+                </div>
 
                 <div class="card-body">
                     @if (session('message'))
@@ -56,6 +62,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @if (count($allPizza) > 0)
                                         @foreach ($allPizza as $key => $pizza )
                                         <tr>
                                             <th scope="row">{{ $key+1 }}</th>
@@ -67,12 +74,40 @@
                                             <td>{{ $pizza->small_pizza_price }}</td>
                                             <td>{{ $pizza->medium_pizza_price }}</td>
                                             <td>{{ $pizza->large_pizza_price }}</td>
-                                            <td><button class="btn btn-info">Edit</button></td>
-                                            <td><button class="btn btn-danger">Delete</button></td>
+                                            <td><a href="{{ route('pizza.edit', $pizza->id) }}"><button class="btn btn-info">Edit</button></a></td>
+                                            <td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $pizza->id }}">Delete</button></td>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal{{ $pizza->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <form action="{{ route('pizza.destroy', $pizza->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Confirm Delete
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                </div>
+                                                        </div>
+                                                    </form>
+                                                    </div>
+                                            </div>
                                         </tr>
                                         @endforeach
+                                        @else
+                                        <p>No Pizza added</p>
+                                        @endif
                                     </tbody>
                                 </table>
+                                <div class="d-flex justify-content-center">
+                                    {{ $allPizza->links() }}
+                                </div>
                             </div>
                         </div>
                 </div>
