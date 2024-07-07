@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,13 +19,7 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $user = new User();
-
-        $user-> name = 'admin';
-        $user->email = 'admin@laravel.com';
-        $user->password = bcrypt('password');
-        $user->is_admin = 1;
-        $user->save();
+     
 
     }
 }
